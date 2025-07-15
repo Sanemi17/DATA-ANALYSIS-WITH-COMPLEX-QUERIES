@@ -1,0 +1,46 @@
+-- TASK 2: ADVANCED QUERIES
+----------------------------
+
+-- Create Sales table
+CREATE TABLE Sales (
+    SaleID INT PRIMARY KEY,
+    EmployeeID INT,
+    Amount DECIMAL(10,2),
+    SaleDate DATE
+);
+
+-- Insert sample data
+INSERT INTO Sales VALUES
+(1, 1, 5000.00, '2023-01-01'),
+(2, 1, 7000.00, '2023-01-05'),
+(3, 2, 6000.00, '2023-01-07'),
+(4, 2, 3000.00, '2023-01-10'),
+(5, 3, 4000.00, '2023-01-15');
+
+-- Window Function: Running total per employee
+SELECT 
+    EmployeeID,
+    SaleDate,
+    Amount,
+    SUM(Amount) OVER (PARTITION BY EmployeeID ORDER BY SaleDate) AS RunningTotal
+FROM Sales;
+
+-- Subquery: Highest sale per employee
+SELECT *
+FROM Sales S
+WHERE Amount = (
+    SELECT MAX(Amount)
+    FROM Sales
+    WHERE EmployeeID = S.EmployeeID
+);
+
+-- CTE: Find sales above employee average
+WITH AvgSales AS (
+    SELECT EmployeeID, AVG(Amount) AS AvgAmount
+    FROM Sales
+    GROUP BY EmployeeID
+)
+SELECT S.EmployeeID, S.Amount, A.AvgAmount
+FROM Sales S
+JOIN AvgSales A ON S.EmployeeID = A.EmployeeID
+WHERE S.Amount > A.AvgAmount;
