@@ -101,3 +101,6 @@ Task 2 helped me understand the depth and power of SQL as a language for not jus
 
 OUTPUTS
 
+"https://github.com/user-attachments/assets/6027e19c-3b10-4ca5-85c3-b41c9237c438"
+
+
